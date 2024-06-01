@@ -6,6 +6,7 @@ import Education from "./components/Education";
 import Skills from "./components/Skills";
 import Research from "./components/Research";
 import Awards from "./components/Awards";
+import Description from "./components/Description";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
             borderRadius="lg"
             rowGap={10}
           >
+            <Description />
             <Education />
             <Skills />
             <Research />
