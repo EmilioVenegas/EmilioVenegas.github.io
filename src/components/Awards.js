@@ -2,7 +2,6 @@
 import React from "react";
 import { Box, Heading, Text, VStack, HStack, Icon } from "@chakra-ui/react";
 import { FaMedal, FaAward, FaTrophy } from "react-icons/fa";
-import { color } from "framer-motion";
 
 const awards = [
   {

@@ -4,9 +4,7 @@ import {
   Box,
   Heading,
   SimpleGrid,
-  Text,
   Badge,
-  VStack,
   HStack,
   Icon,
 } from "@chakra-ui/react";

@@ -1,6 +1,6 @@
 // src/components/Education.js
 import React from "react";
-import { Box, Heading, Text, VStack } from "@chakra-ui/react";
+import { Box, Heading, Text } from "@chakra-ui/react";
 
 const Education = () => {
   return (

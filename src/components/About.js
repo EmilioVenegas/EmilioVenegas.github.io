@@ -1,13 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Heading,
-  Text,
-  Link,
-  VStack,
-  HStack,
-  Flex,
-} from "@chakra-ui/react";
+import { Box, Heading, Text, Link, VStack, Flex } from "@chakra-ui/react";
 import backgroundImage from "../assets/background_plate.jpg"; // Import your background image
 import { FaLinkedin, FaGithub } from "react-icons/fa";
 

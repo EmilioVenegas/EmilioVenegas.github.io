@@ -1,6 +1,6 @@
 // src/App.js
 import React from "react";
-import { ChakraProvider, Box, Container, Flex, VStack } from "@chakra-ui/react";
+import { ChakraProvider, Box, Flex } from "@chakra-ui/react";
 import About from "./components/About";
 import Education from "./components/Education";
 import Skills from "./components/Skills";
