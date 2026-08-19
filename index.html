@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Emilio Venegas — Computational Biologist</title>
+<meta name="description" content="Computational biologist. Geometric deep learning for structure-based drug design, and longitudinal modeling of clinical cohorts.">
+<link rel="icon" href="data:,">
+<style>
+:root{
+  --bg:#fdfdfc; --fg:#1a1a18; --muted:#55554f; --rule:#dedcd6;
+  --link:#0b5cad; --focus:#0b5cad;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#16171a; --fg:#e8e6e1; --muted:#a5a29a; --rule:#2e3034;
+    --link:#8cbdef; --focus:#8cbdef;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+  font-feature-settings:"kern" 1;
+}
+main{max-width:44rem; margin:0 auto; padding:3rem 1.25rem 4rem}
+h1{font-size:1.6rem; line-height:1.2; margin:0 0 .5rem; letter-spacing:-.01em}
+h2{
+  font-size:.8rem; text-transform:uppercase; letter-spacing:.09em; font-weight:600;
+  color:var(--muted); margin:2.75rem 0 1rem; padding-bottom:.4rem;
+  border-bottom:1px solid var(--rule);
+}
+h3{font-size:1rem; margin:0 0 .25rem; font-weight:600}
+p{margin:0 0 .75rem}
+.lede{font-size:1.05rem; margin:0 0 .6rem; max-width:38rem}
+.meta{color:var(--muted); font-size:.925rem; margin:0}
+article{margin:0 0 1.6rem}
+article p{margin:0; color:var(--muted)}
+article p em{font-style:italic}
+.tag{
+  font-weight:400; font-size:.8rem; color:var(--muted);
+  letter-spacing:.02em; margin-left:.4rem; white-space:nowrap;
+}
+.also{color:var(--muted); font-size:.925rem; margin:1.75rem 0 0}
+.bg p{color:var(--muted)}
+ul.links{list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:.4rem 1.4rem}
+ul.links li{margin:0}
+a{color:var(--link); text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:2px}
+a:hover{text-decoration-thickness:2px}
+a:focus-visible{outline:2px solid var(--focus); outline-offset:2px; border-radius:2px}
+@media (max-width:26rem){
+  main{padding:2rem 1rem 3rem}
+  h1{font-size:1.4rem}
+  .lede{font-size:1rem}
+  body{font-size:15.5px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none !important; transition:none !important}
+}
+</style>
+</head>
+<body>
+<main>
+
+<header>
+  <h1>Emilio Venegas</h1>
+  <p class="lede">Computational biologist — geometric deep learning for structure-based drug design, and longitudinal modeling of clinical cohorts.</p>
+  <p class="meta">B.Sc. Biosciences, Tecnológico de Monterrey (2026) · Guadalajara, Mexico · <a href="mailto:emiliovenegas10@gmail.com">emiliovenegas10@gmail.com</a></p>
+</header>
+
+<section>
+  <h2>Selected work</h2>
+
+  <article>
+    <h3><a href="https://github.com/EmilioVenegas/metal-aware-sbdd">metal-aware-sbdd</a></h3>
+    <p>Published pocket-conditioned 3D generative models — DiffSBDD, TargetDiff, Pocket2Mol — delete catalytic metal ions during preprocessing; found by reading their source. On a curated 133-target catalytic-zinc benchmark held disjoint from CrossDocked training data, generated ligands coordinate the zinc validly in 20% of molecules against a 77% native-ligand ceiling. Fine-tuning on metalloprotein-enriched data through the same metal-blind representation makes it worse, not better: 11%. Endpoints and decision rules pre-registered before the data they judge. Repair arm in progress.</p>
+  </article>
+
+  <article>
+    <h3><a href="https://github.com/EmilioVenegas/strider">strider</a></h3>
+    <p>Nucleic acid thermodynamics and kinetics in pure Python, with no NUPACK or ViennaRNA dependency: nearest-neighbor free energies, O(n³) secondary-structure folding (Zuker, McCaskill), strand-displacement rate constants, parallel-tempered sequence design. Mean F-measure 0.99 across 11 canonical hairpins, 10 of 11 an exact match; 0% relative error on toehold rate constants from 0 to 12 nt; 646 tests. On PyPI as <em>strider-dna</em>.</p>
+  </article>
+
+  <article>
+    <h3><a href="https://github.com/EmilioVenegas/cadence">cadence</a></h3>
+    <p>Latent Neural ODE–VAE over six waves of the Mexican Health and Aging Study (2001–2021), compressing 34 clinical deficits into an 8-dimensional manifold whose native output is aging velocity. Cognitive-decline AUC 0.72 → 0.79 and functional-decline AUC 0.67 → 0.75 over demographics and clinical state, under patient-level 5-fold cross-validation; mortality C-index 0.865 against 0.780 for the same encoder without ODE integration. A digital-twin module re-integrates the learned dynamics under modified lifestyle controls, behind a conformal Mahalanobis out-of-distribution guardrail.</p>
+  </article>
+
+  <article>
+    <h3><a href="https://github.com/EmilioVenegas/ATOMICA-Diffusion-Antibiotic-design">ATOMICA-Diffusion</a></h3>
+    <p>Does conditioning a structure-based diffusion model on a pretrained <em>interaction</em> representation beat raw pocket geometry? Couples frozen ATOMICA pocket embeddings to frozen DiffSBDD through a single SE(3)-equivariant cross-attention adapter, so the measured effect isolates the conditioning signal. Across 100 held-out pockets and roughly 9,300 valid molecules per arm, QED rises 0.424 → 0.483 and Lipinski 4.42 → 4.69. Target application: PBP3 in multidrug-resistant <em>A. baumannii</em>, <em>P. aeruginosa</em> and <em>K. pneumoniae</em>.</p>
+  </article>
+
+  <article>
+    <h3><a href="https://github.com/EmilioVenegas/mantis-delta">mantis-delta</a></h3>
+    <p>Chemical reaction network theory under mass-action kinetics: deficiency, linkage classes and weak reversibility, then the Deficiency Zero and Deficiency One theorems, with symbolic ODEs and Jacobians via SymPy. When a theorem applies, qualitative behaviour is certified from topology alone for every admissible rate constant, without running a simulation. Steady-state residuals below 10⁻⁶ M s⁻¹; Goldbeter–Koshland dose-response matches the quasi-steady-state approximation to within 1% across a 400× activity scan; 169 tests.</p>
+  </article>
+
+  <article>
+    <h3>Gram-stain pathogen identification <span class="tag">not public</span></h3>
+    <p>Self-attention Multiple Instance Learning over Vision Transformer patch embeddings, across 5,828 standardized clinical isolates: 0.947 accuracy on Gram class, 0.876 at species level. Built with clinical microbiologists at Hospital Civil de Guadalajara. Manuscript under review; code not yet public.</p>
+  </article>
+
+  <p class="also">Also public: <a href="https://github.com/EmilioVenegas/VAMprinting">VAMprinting</a>, a web controller for volumetric additive manufacturing printers · <a href="https://github.com/EmilioVenegas/arq-molecular-engineering">arq</a>, LangGraph agents for molecular design over SMILES · <a href="https://github.com/EmilioVenegas/breast-cancer-app">CancerSense</a>, a mammography CNN on INbreast and DDSM.</p>
+</section>
+
+<section class="bg">
+  <h2>Background</h2>
+  <p>B.Sc. Biosciences, Tecnológico de Monterrey (2026). A.Sc. Pharmaceutical Chemistry, CETI Colomos (2022).</p>
+  <p>Previously: instrumentation and tomographic-printing software at Brigham and Women's Hospital / Harvard Medical School; machine learning at Mendel Biosciences; AI/ML research at Hospital Civil de Guadalajara.</p>
+  <p>Gold Medal, Iberoamerican Chemistry Olympiad (2021). Bronze Medal, 53rd International Chemistry Olympiad, Japan (2021).</p>
+</section>
+
+<section>
+  <h2>Links</h2>
+  <ul class="links">
+    <li><a href="https://github.com/EmilioVenegas">GitHub</a></li>
+    <li><a href="https://www.linkedin.com/in/emiliovenegas">LinkedIn</a></li>
+    <li><a href="https://orcid.org/0000-0002-7689-9185">ORCID</a></li>
+    <li><a href="mailto:emiliovenegas10@gmail.com">Email</a></li>
+  </ul>
+</section>
+
+</main>
+</body>
+</html>
