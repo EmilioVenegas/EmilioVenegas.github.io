@@ -169,10 +169,12 @@ figcaption b{color:var(--muted);font-weight:400}
 .bar::after{content:"";position:absolute;inset:0 auto 0 0;width:0;background:var(--accent);border-radius:2px}
 .bar.neg::after{background:var(--rust)}
 
-/* ---------- divider strand ---------- */
-.strand{display:block;width:100%;height:26px;margin:1rem 0 0;overflow:visible}
-.strand path{fill:none;stroke:var(--line2);stroke-width:1.1}
-.strand .rung{stroke:var(--accent);stroke-width:1;opacity:.5}
+/* ---------- full-width project ---------- */
+.proj.solo .proj-grid{grid-template-columns:1fr}
+.proj.solo figure{margin-top:1.9rem}
+.proj.solo figcaption{max-width:82ch}
+figcaption a{border-bottom:1px solid var(--line2)}
+figcaption a:hover{border-color:var(--accent)}
 
 /* ---------- background block ---------- */
 .bglist{list-style:none;margin:0;padding:0;display:grid;gap:1.45rem}
@@ -214,25 +216,22 @@ html.js .rv.in{
 }
 html.js .shead .rule{transition:transform .9s var(--ease) .1s}
 html.js .shead.in .rule{transform:scaleX(1)}
-html.js .proj .metric{opacity:0;transform:translateY(10px)}
-html.js .proj.in .metric{
+html.js .metrics .metric{opacity:0;transform:translateY(10px)}
+html.js .metrics.in .metric{
   opacity:1;transform:none;
   transition:opacity .6s var(--ease),transform .6s var(--ease);
-  transition-delay:calc(.18s + var(--j,0)*90ms);
+  transition-delay:calc(var(--j,0)*90ms);
 }
-html.js .proj.in .bar::after{
+html.js .metrics.in .bar::after{
   width:calc(var(--v,0)*100%);
-  transition:width 1.05s var(--ease) calc(.3s + var(--j,0)*90ms);
+  transition:width 1.05s var(--ease) calc(.12s + var(--j,0)*90ms);
 }
-html.js .strand path{stroke-dasharray:var(--len,600);stroke-dashoffset:var(--len,600)}
-html.js .strand.in path{stroke-dashoffset:0;transition:stroke-dashoffset 1.6s var(--ease)}
 
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  html.js .rv,html.js .proj .metric{opacity:1!important;transform:none!important;transition:none!important}
+  html.js .rv,html.js .metrics .metric{opacity:1!important;transform:none!important;transition:none!important}
   html.js .shead .rule{transform:scaleX(1)!important;transition:none!important}
-  html.js .proj.in .bar::after{width:calc(var(--v,0)*100%);transition:none!important}
-  html.js .strand path{stroke-dashoffset:0!important;transition:none!important}
+  html.js .bar::after{width:calc(var(--v,0)*100%);transition:none!important}
   .hero figure{transform:none!important}
 }
 @media (max-width:420px){
@@ -243,8 +242,9 @@ html.js .strand.in path{stroke-dashoffset:0;transition:stroke-dashoffset 1.6s va
   .proj{padding:1.9rem 0}
   .proj-grid{gap:1.45rem}
   .shead{margin-bottom:1.75rem}
-  .mv{font-size:1.32rem}
-  .metrics{grid-template-columns:repeat(auto-fit,minmax(6.2rem,1fr));gap:.85rem .9rem}
+  .metrics{grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem .55rem}
+  .mv{font-size:1.2rem}
+  .ml{font-size:10.5px}
   .lede{max-width:none}
 }
 </style>
@@ -300,11 +300,11 @@ html.js .strand.in path{stroke-dashoffset:0;transition:stroke-dashoffset 1.6s va
         <div class="proj-body">
           <div class="pname"><span class="n">01</span><h3><a href="https://github.com/EmilioVenegas/metal-aware-sbdd">metal-aware-sbdd</a></h3></div>
           <p class="kicker">The metal is deleted before the model ever sees the pocket.</p>
-          <p class="body">Published pocket-conditioned 3D generative models — DiffSBDD, TargetDiff, Pocket2Mol — strip catalytic metal ions during preprocessing. Found by reading their source. On a curated 133-target catalytic-zinc benchmark held disjoint from CrossDocked training data, generated ligands coordinate the zinc validly in a fifth of molecules against a 77% native-ligand ceiling. Fine-tuning on metalloprotein-enriched data through the same metal-blind representation makes it worse, not better. Endpoints and decision rules pre-registered before the data they judge; the repair arm is still running.</p>
+          <p class="body">Published pocket-conditioned 3D generative models — DiffSBDD, TargetDiff, Pocket2Mol — strip catalytic metal ions during preprocessing. Found by reading their source. On a curated 133-target catalytic-zinc benchmark held disjoint from CrossDocked training data, generated ligands coordinate the zinc validly in a fifth of molecules against a 77% native-ligand ceiling, measured on its pre-registered 127-target X-ray stratum. Fine-tuning on metalloprotein-enriched data through the same metal-blind representation makes it worse, not better — and a cheap post-hoc SMARTS filter on the unmodified base model beats both. Endpoints and decision rules pre-registered before the data they judge; the repair arm is still running.</p>
           <ul class="metrics">
-            <li class="metric" style="--j:0"><span class="mv">77.2<i>%</i></span><span class="ml">native-ligand ceiling</span><span class="bar" style="--v:.7717"></span></li>
-            <li class="metric" style="--j:1"><span class="mv">20.0<i>%</i></span><span class="ml">base DiffSBDD</span><span class="bar" style="--v:.1998"></span></li>
-            <li class="metric" style="--j:2"><span class="mv"><span class="dn">10.6</span><i>%</i></span><span class="ml">after metal-blind fine-tuning</span><span class="bar neg" style="--v:.1058"></span></li>
+            <li class="metric" style="--j:0"><span class="mv">77.2<i>%</i></span><span class="ml">native-ligand ceiling, pooled</span><span class="bar" style="--v:.7717"></span></li>
+            <li class="metric" style="--j:1"><span class="mv">20.0<i>%</i></span><span class="ml">base DiffSBDD, pooled</span><span class="bar" style="--v:.1998"></span></li>
+            <li class="metric" style="--j:2"><span class="mv"><span class="dn">10.6</span><i>%</i></span><span class="ml">metal-blind fine-tuning, pooled</span><span class="bar neg" style="--v:.1058"></span></li>
           </ul>
         </div>
         <figure>
@@ -312,9 +312,9 @@ html.js .strand.in path{stroke-dashoffset:0;transition:stroke-dashoffset 1.6s va
             <img src="assets/figures/coordination-arms-900.webp"
                  srcset="assets/figures/coordination-arms-900.webp 900w, assets/figures/coordination-arms-1350.webp 1350w"
                  sizes="(min-width:860px) 46vw, 92vw" width="900" height="417" loading="lazy" decoding="async"
-                 alt="Horizontal bar chart of the percentage of molecules with at least one valid metal coordination. Native ligands reach a pooled 77.17 percent, base DiffSBDD 19.98 percent, and the metal-blind fine-tuned arm falls to 10.58 percent, each with cluster-mean confidence intervals.">
+                 alt="Horizontal bar chart, molecules with at least one valid metal coordination. Each bar is the cluster-mean rate with a 95 percent confidence interval, and a diamond marks the pooled molecule-level rate. Native ligands 82.9 percent, pooled 77.17. Base DiffSBDD with a post-hoc SMARTS filter that keeps 38 percent of molecules, 28.9 percent, pooled 24.45. Base DiffSBDD 27.2 percent, pooled 19.98. Metal-blind fine-tuned arm 13.8 percent, pooled 10.58.">
           </div>
-          <figcaption><b>Valid coordination against the deleted catalytic Zn²⁺.</b> Primary X-ray cohort: 127 targets in 21 sequence clusters, 100 valid molecules per target. Fine-tuning moves the wrong way.</figcaption>
+          <figcaption><b>Valid coordination against the deleted catalytic Zn²⁺.</b> Primary X-ray cohort: 127 targets in 21 sequence clusters, 100 valid molecules per target. Bars are cluster means; the values quoted alongside are the pooled rates marked by diamonds. Fine-tuning moves the wrong way.</figcaption>
         </figure>
       </div>
     </article>
@@ -325,7 +325,7 @@ html.js .strand.in path{stroke-dashoffset:0;transition:stroke-dashoffset 1.6s va
         <div class="proj-body">
           <div class="pname"><span class="n">02</span><h3><a href="https://github.com/EmilioVenegas/strider">strider</a></h3></div>
           <p class="kicker">Nucleic-acid thermodynamics without NUPACK or ViennaRNA.</p>
-          <p class="body">Nearest-neighbor free energies, O(n³) secondary-structure folding by Zuker and McCaskill recursions, strand-displacement rate constants, and a defect-weighted parallel-tempered sequence designer — pure Python, no external thermodynamics dependency. Validated against canonical hairpins rather than asserted. Published on PyPI as <em>strider-dna</em>.</p>
+          <p class="body">Nearest-neighbor free energies, O(n³) secondary-structure folding by Zuker and McCaskill recursions, strand-displacement rate constants, and a defect-weighted parallel-tempered sequence designer — pure Python with an optional Rust fast path, and no external thermodynamics dependency. Validated against canonical hairpins rather than asserted. Published on PyPI as <em>strider-dna</em>.</p>
           <ul class="metrics">
             <li class="metric" style="--j:0"><span class="mv">0.99</span><span class="ml">mean F-measure, 11 canonical hairpins</span><span class="bar" style="--v:.99"></span></li>
             <li class="metric" style="--j:1"><span class="mv">10<i>/11</i></span><span class="ml">exact structure match</span><span class="bar" style="--v:.909"></span></li>
@@ -350,10 +350,10 @@ html.js .strand.in path{stroke-dashoffset:0;transition:stroke-dashoffset 1.6s va
         <div class="proj-body">
           <div class="pname"><span class="n">03</span><h3><a href="https://github.com/EmilioVenegas/cadence">cadence</a></h3></div>
           <p class="kicker">Aging as a velocity, not a state.</p>
-          <p class="body">A latent Neural ODE–VAE over six waves of the Mexican Health and Aging Study, 2001 to 2021, compressing 34 clinical deficits into an 8-dimensional manifold whose native output is aging velocity. Two patients with identical frailty scores can sit in entirely different velocity regimes. Cognitive-decline AUC 0.72 → 0.79 and functional-decline 0.67 → 0.75 over demographics and clinical state under patient-level 5-fold cross-validation; removing ODE integration from the same encoder and risk head costs 0.085 of mortality C-index. A digital-twin module re-integrates the learned dynamics under modified lifestyle controls, behind a conformal Mahalanobis out-of-distribution guardrail.</p>
+          <p class="body">A latent Neural ODE–VAE over six waves of the Mexican Health and Aging Study, 2001 to 2021, compressing 34 clinical deficits into an 8-dimensional manifold whose native output is aging velocity. Two patients with identical frailty scores can sit in entirely different velocity regimes. Cognitive-decline AUC 0.72 → 0.79 and functional-decline 0.67 → 0.75 over demographics and clinical state under patient-level 5-fold cross-validation. Mortality C-index reaches 0.865 on the velocity-extreme quartiles against 0.780 for the same encoder and risk head without ODE integration on the full cohort — different samples, so that gap is indicative and not a clean single-factor ablation. A digital-twin module re-integrates the learned dynamics under modified lifestyle controls, behind a conformal Mahalanobis out-of-distribution guardrail.</p>
           <ul class="metrics">
-            <li class="metric" style="--j:0"><span class="mv">0.865</span><span class="ml">mortality C-index, full model</span><span class="bar" style="--v:.865"></span></li>
-            <li class="metric" style="--j:1"><span class="mv">0.780</span><span class="ml">same encoder, no ODE</span><span class="bar" style="--v:.780"></span></li>
+            <li class="metric" style="--j:0"><span class="mv">0.865</span><span class="ml">C-index, velocity extremes (n=11,366)</span><span class="bar" style="--v:.865"></span></li>
+            <li class="metric" style="--j:1"><span class="mv">0.780</span><span class="ml">no ODE, full cohort (n=22,729)</span><span class="bar" style="--v:.780"></span></li>
             <li class="metric" style="--j:2"><span class="mv">4.77<i>×</i></span><span class="ml">mortality hazard, fast vs slow agers</span></li>
           </ul>
         </div>
@@ -375,11 +375,11 @@ html.js .strand.in path{stroke-dashoffset:0;transition:stroke-dashoffset 1.6s va
         <div class="proj-body">
           <div class="pname"><span class="n">04</span><h3><a href="https://github.com/EmilioVenegas/ATOMICA-Diffusion-Antibiotic-design">ATOMICA-Diffusion</a></h3></div>
           <p class="kicker">Does a pretrained interaction representation beat raw pocket geometry?</p>
-          <p class="body">Couples frozen ATOMICA pocket embeddings — a foundation model pretrained on roughly two million molecular interaction interfaces — into a frozen DiffSBDD through a single SE(3)-equivariant cross-attention adapter. Both backbones stay frozen, so the measured effect isolates the conditioning signal itself. It buys drug-likeness and costs diversity, which is the honest result rather than the convenient one. Applied to PBP3 in multidrug-resistant <em>A. baumannii</em>, <em>P. aeruginosa</em> and <em>K. pneumoniae</em>.</p>
+          <p class="body">Couples frozen ATOMICA pocket embeddings — a foundation model pretrained on roughly two million molecular interaction interfaces — into a frozen DiffSBDD through a single SE(3)-equivariant cross-attention adapter. Both backbones stay frozen, so the measured effect isolates the conditioning signal. Drug-likeness rises, diversity falls. The honest reading is narrower than that sounds: preprocessing handed ATOMICA the whole pocket as a single UNK block, engaging none of its interaction semantics, so this stands as a clean negative result for naively-extracted foundation-model embeddings — and the matched docking comparison that would settle it has not been run. Motivated by PBP3 in multidrug-resistant <em>A. baumannii</em>, <em>P. aeruginosa</em> and <em>K. pneumoniae</em>; the benchmark reported here is CrossDocked.</p>
           <ul class="metrics">
-            <li class="metric" style="--j:0"><span class="mv">+13.9<i>%</i></span><span class="ml">QED against unconditioned baseline</span><span class="bar" style="--v:.927"></span></li>
-            <li class="metric" style="--j:1"><span class="mv">+6.2<i>%</i></span><span class="ml">Lipinski compliance</span><span class="bar" style="--v:.413"></span></li>
-            <li class="metric" style="--j:2"><span class="mv"><span class="dn">−6.4</span><i>%</i></span><span class="ml">diversity, the tradeoff</span><span class="bar neg" style="--v:.427"></span></li>
+            <li class="metric" style="--j:0"><span class="mv">+13.9<i>%</i></span><span class="ml">QED against unconditioned baseline</span></li>
+            <li class="metric" style="--j:1"><span class="mv">+6.2<i>%</i></span><span class="ml">Lipinski compliance</span></li>
+            <li class="metric" style="--j:2"><span class="mv"><span class="dn">−6.4</span><i>%</i></span><span class="ml">diversity, the tradeoff</span></li>
           </ul>
         </div>
         <figure>
@@ -400,10 +400,10 @@ html.js .strand.in path{stroke-dashoffset:0;transition:stroke-dashoffset 1.6s va
         <div class="proj-body">
           <div class="pname"><span class="n">05</span><h3><a href="https://github.com/EmilioVenegas/mantis-delta">mantis-delta</a></h3></div>
           <p class="kicker">Certify the dynamics from topology, before running anything.</p>
-          <p class="body">Chemical reaction network theory under mass-action kinetics: deficiency, linkage classes and weak reversibility, then the Deficiency Zero and Deficiency One theorems, with symbolic ODEs and Jacobians derived through SymPy. When a theorem applies you know the qualitative behaviour — unique steady state, no oscillations, no bistability — for <em>every</em> physically admissible rate constant, without running a single simulation. Where no theorem applies, the numerical side takes over and finds the limit cycles.</p>
+          <p class="body">Chemical reaction network theory under mass-action kinetics: deficiency, linkage classes and weak reversibility, then the Deficiency Zero and Deficiency One theorems, with symbolic ODEs and Jacobians derived through SymPy. Where the Deficiency Zero Theorem applies you know the qualitative behaviour — one stable steady state, no oscillations, no bistability — for <em>every</em> physically admissible rate constant, without running a single simulation. The Deficiency One Theorem bounds how many steady states exist without excluding oscillation, and where no theorem applies the numerical side takes over and finds the limit cycles.</p>
           <ul class="metrics">
             <li class="metric" style="--j:0"><span class="mv">&lt;1<i>%</i></span><span class="ml">deviation from QSSA, 400× activity scan</span></li>
-            <li class="metric" style="--j:1"><span class="mv">10<i>⁻⁶</i></span><span class="ml">steady-state residual, M s⁻¹</span></li>
+            <li class="metric" style="--j:1"><span class="mv">&lt;10<i>⁻⁶</i></span><span class="ml">steady-state residual tolerance, M s⁻¹</span></li>
             <li class="metric" style="--j:2"><span class="mv">169</span><span class="ml">tests passing</span></li>
           </ul>
         </div>
@@ -412,38 +412,35 @@ html.js .strand.in path{stroke-dashoffset:0;transition:stroke-dashoffset 1.6s va
             <img src="assets/figures/brusselator-900.webp"
                  srcset="assets/figures/brusselator-900.webp 900w, assets/figures/brusselator-1350.webp 1350w"
                  sizes="(min-width:860px) 46vw, 92vw" width="900" height="327" loading="lazy" decoding="async"
-                 alt="Two panels for the chemostatted Brusselator. The left panel shows two species concentrations oscillating in sustained antiphase over forty seconds. The right panel shows the phase portrait, with the transient spiralling outward onto a closed limit cycle around a marked unstable fixed point.">
+                 alt="Two panels for the chemostatted Brusselator. The left panel shows about six cycles over forty seconds: species X spikes sharply while species Y rises slowly and collapses at each spike. The right panel shows the phase portrait, with the transient spiralling outward onto a closed limit cycle around a marked unstable fixed point.">
           </div>
-          <figcaption><b>Brusselator, A = 1 and B = 3.</b> Sustained oscillation and the limit cycle in phase space, with the unstable fixed point marked — the regime the deficiency theorems explicitly cannot rule out.</figcaption>
+          <figcaption><b>Brusselator, A = 1 and B = 3.</b> Relaxation oscillation and the limit cycle in phase space, with the unstable fixed point marked — this network is deficiency one and not weakly reversible, so no theorem rules the cycle out.</figcaption>
         </figure>
       </div>
     </article>
 
     <!-- 6 -->
-    <article class="proj rv flip">
+    <article class="proj rv solo">
       <div class="proj-grid">
         <div class="proj-body">
           <div class="pname"><span class="n">06</span><h3>Gram-stain pathogen identification</h3><span class="tag">not public</span></div>
           <p class="kicker">Whole-slide attention over a corpus built with the microbiologists who labelled it.</p>
-          <p class="body">Self-attention Multiple Instance Learning over Vision Transformer patch embeddings, standardizing 5,828 clinical isolates through 95th-percentile normalization, CLAHE and Otsu thresholding, with multi-head attention modelling spatial context across the whole slide. Built with clinical microbiologists at Hospital Civil de Guadalajara, who set the label-quality and validation design. Manuscript under review; code not yet public.</p>
+          <p class="body">Self-attention Multiple Instance Learning over Vision Transformer patch embeddings, standardizing 5,828 clinical isolates through 95th-percentile normalization, CLAHE and Otsu thresholding, with multi-head attention modelling spatial context across the whole slide. Built with clinical microbiologists at Hospital Civil de Guadalajara, who set the label-quality and validation design. Manuscript under review and the code is not public, so unlike every other number here these three are self-reported.</p>
           <ul class="metrics">
             <li class="metric" style="--j:0"><span class="mv">0.947</span><span class="ml">accuracy, Gram class</span><span class="bar" style="--v:.947"></span></li>
             <li class="metric" style="--j:1"><span class="mv">0.876</span><span class="ml">accuracy, species level</span><span class="bar" style="--v:.876"></span></li>
             <li class="metric" style="--j:2"><span class="mv">5,828</span><span class="ml">clinical isolates</span></li>
           </ul>
         </div>
-        <div>
-          <svg class="strand rv" viewBox="0 0 300 26" preserveAspectRatio="none" aria-hidden="true" style="height:70px">
-            <path style="--len:640" d="M0 4 C 25 4, 25 22, 50 22 S 75 4, 100 4 S 125 22, 150 22 S 175 4, 200 4 S 225 22, 250 22 S 275 4, 300 4"/>
-            <path style="--len:640" d="M0 22 C 25 22, 25 4, 50 4 S 75 22, 100 22 S 125 4, 150 4 S 175 22, 200 22 S 225 4, 250 4 S 275 22, 300 22"/>
-            <g class="rung">
-              <path style="--len:20" d="M25 8v10"/><path style="--len:20" d="M75 8v10"/>
-              <path style="--len:20" d="M125 8v10"/><path style="--len:20" d="M175 8v10"/>
-              <path style="--len:20" d="M225 8v10"/><path style="--len:20" d="M275 8v10"/>
-            </g>
-          </svg>
-          <figcaption style="margin-top:1rem">No figure here on purpose. The corpus is clinical and the code is not public yet, so there is nothing on this page that a reader cannot check.</figcaption>
-        </div>
+        <figure>
+          <div class="plate">
+            <img src="assets/figures/gram-attention-1200.webp"
+                 srcset="assets/figures/gram-attention-1200.webp 1200w, assets/figures/gram-attention-1800.webp 1800w"
+                 sizes="(min-width:1000px) 60rem, 92vw" width="1200" height="1342" loading="lazy" decoding="async"
+                 alt="A four-column grid repeated for five classes — Acinetobacter, Enterobacter, Staphylococcus, Streptococcus and Yeast. Column A is the original Gram-stained micrograph, pink for Gram-negative rods and purple for Gram-positive cocci. Column B is the model's attention heatmap on black, where bright inferno-coloured peaks mark the tiles the model weighted most. Column C overlays that heatmap on the micrograph, showing the peaks landing on the stained organisms rather than on empty background. Column D shows the sixteen highest-attention tiles, each containing visible cells of the expected morphology.">
+          </div>
+          <figcaption><b>Where the model looks, five representative classes.</b> Attention concentrates on stained organisms rather than on slide background or debris. The Enterobacter row is the informative one: attention fires on a dense smear whose highest-weighted tiles are nearly featureless. <a href="assets/figures/gram-attention-1800.webp">Full size</a>.</figcaption>
+        </figure>
       </div>
     </article>
 
@@ -462,7 +459,7 @@ html.js .strand.in path{stroke-dashoffset:0;transition:stroke-dashoffset 1.6s va
     <ul class="bglist">
       <li class="rv"><span class="k">Education</span><p class="v"><b>B.Sc. Biosciences</b>, Tecnológico de Monterrey, 2026. <b>A.Sc. Pharmaceutical Chemistry</b>, CETI Colomos, 2022.</p></li>
       <li class="rv" style="--i:1"><span class="k">Previously</span><p class="v">Instrumentation and tomographic-printing software at <b>Brigham and Women's Hospital / Harvard Medical School</b>. Machine learning at <b>Mendel Biosciences</b>. AI/ML research at <b>Hospital Civil de Guadalajara</b>.</p></li>
-      <li class="rv" style="--i:2"><span class="k">Bench</span><p class="v">Cell culture, 3D spheroids, qPCR, flow cytometry, Western blotting, organic synthesis — which is why collaborating with experimental teams is not a translation problem.</p></li>
+      <li class="rv" style="--i:2"><span class="k">Bench</span><p class="v">Cell culture, 3D spheroids, qPCR, flow cytometry, Western blotting, organic synthesis. The Gram-stain corpus above was labelled in the same hospital lab that produced the slides.</p></li>
       <li class="rv" style="--i:3"><span class="k">Olympiad</span><p class="v"><b>Gold Medal</b>, Iberoamerican Chemistry Olympiad, 2021. <b>Bronze Medal</b>, 53rd International Chemistry Olympiad, Japan, 2021.</p></li>
     </ul>
   </div>
@@ -478,7 +475,7 @@ html.js .strand.in path{stroke-dashoffset:0;transition:stroke-dashoffset 1.6s va
       <li class="rv" style="--i:3"><a href="mailto:emiliovenegas10@gmail.com"><span>Email</span><span class="h">emiliovenegas10@gmail.com</span></a></li>
     </ul>
     <footer>
-      <span>Every figure is output from the repository it sits next to.</span>
+      <span>Every figure is output from the work it sits beside, not an illustration of it.</span>
       <span><a href="https://github.com/EmilioVenegas/EmilioVenegas.github.io">Source</a></span>
     </footer>
   </div>
@@ -498,35 +495,40 @@ html.js .strand.in path{stroke-dashoffset:0;transition:stroke-dashoffset 1.6s va
       if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
     });
   },{rootMargin:'0px 0px -12% 0px',threshold:0.12});
-  document.querySelectorAll('.rv,.proj,.shead,.strand').forEach(function(el){io.observe(el);});
+  document.querySelectorAll('.rv,.proj,.shead,.metrics').forEach(function(el){io.observe(el);});
 
-  /* scroll progress + hero parallax, one rAF-throttled listener */
+  /* rail targets */
+  var links=[].slice.call(document.querySelectorAll('.rail a')),
+      secs=links.map(function(a){return document.querySelector(a.getAttribute('href'));}),
+      active=-2;
+
+  /* scroll progress, hero parallax and rail state: one rAF-throttled listener */
   var barEl=document.querySelector('.progress i'),
       heroFig=document.querySelector('.hero figure'),
       queued=false;
   function frame(){
     queued=false;
-    var max=document.documentElement.scrollHeight-innerHeight,
-        y=scrollY;
+    var y=scrollY,
+        max=document.documentElement.scrollHeight-innerHeight;
     barEl.style.width=(max>0?Math.min(1,y/max)*100:0)+'%';
     if(!reduce&&heroFig&&y<innerHeight*1.3){
       heroFig.style.transform='translate3d(0,'+(y*-0.055).toFixed(2)+'px,0)';
     }
+    /* the section owning the reading line, or none while the hero holds it */
+    var line=y+innerHeight*0.45,now=-1;
+    for(var i=0;i<secs.length;i++){
+      var s=secs[i];
+      if(s&&s.getBoundingClientRect().top+y<=line)now=i;
+    }
+    if(now!==active){
+      active=now;
+      for(var n=0;n<links.length;n++)links[n].classList.toggle('on',n===active);
+    }
   }
   addEventListener('scroll',function(){if(!queued){queued=true;requestAnimationFrame(frame);}},{passive:true});
   addEventListener('resize',frame,{passive:true});
+  addEventListener('load',frame);
   frame();
-
-  /* rail: mark the section currently owning the viewport */
-  var links=[].slice.call(document.querySelectorAll('.rail a')),
-      secs=links.map(function(a){return document.querySelector(a.getAttribute('href'));});
-  var sio=new IntersectionObserver(function(es){
-    es.forEach(function(e){
-      var i=secs.indexOf(e.target);
-      if(i>-1&&e.isIntersecting){links.forEach(function(a,n){a.classList.toggle('on',n===i);});}
-    });
-  },{rootMargin:'-45% 0px -50% 0px'});
-  secs.forEach(function(s){if(s)sio.observe(s);});
 })();
 </script>
 </body>
