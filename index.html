@@ -5,123 +5,529 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Emilio Venegas — Computational Biologist</title>
 <meta name="description" content="Computational biologist. Geometric deep learning for structure-based drug design, and longitudinal modeling of clinical cohorts.">
-<link rel="icon" href="data:,">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Emilio Venegas — Computational Biologist">
+<meta property="og:description" content="Geometric deep learning for structure-based drug design, and longitudinal modeling of clinical cohorts.">
+<meta property="og:url" content="https://emiliovenegas.github.io/">
+<meta property="og:image" content="https://emiliovenegas.github.io/assets/figures/zinc-site-1290.webp">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='6' fill='%230d6e63'/%3E%3Cg stroke='%230d6e63' stroke-width='2' fill='none'%3E%3Cpath d='M16 4v5M16 23v5M4.6 9.5l4.4 2.6M23 20l4.4 2.5M4.6 22.5l4.4-2.6M23 12l4.4-2.5'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="preload" href="assets/fonts/plex-sans-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/plex-sans-600.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/plex-mono-400.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+/* ---------- fonts, self-hosted ---------- */
+@font-face{font-family:Plex;src:url(assets/fonts/plex-sans-400.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:Plex;src:url(assets/fonts/plex-sans-600.woff2) format("woff2");font-weight:600;font-style:normal;font-display:swap}
+@font-face{font-family:PlexMono;src:url(assets/fonts/plex-mono-400.woff2) format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:PlexMono;src:url(assets/fonts/plex-mono-500.woff2) format("woff2");font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:PlexSerif;src:url(assets/fonts/plex-serif-400i.woff2) format("woff2");font-weight:400;font-style:italic;font-display:swap}
+
+/* ---------- tokens ---------- */
 :root{
-  --bg:#fdfdfc; --fg:#1a1a18; --muted:#55554f; --rule:#dedcd6;
-  --link:#0b5cad; --focus:#0b5cad;
+  --bg:#fbfaf7; --bg2:#f4f2ed; --surface:#ffffff; --plate:#ffffff;
+  --ink:#15181c; --ink2:#3d434c; --muted:#5f6670; --faint:#6c737c;
+  --line:#e2ded4; --line2:#cfcabc;
+  --accent:#0d6e63; --accent-soft:#0d6e6318; --rust:#a8442a;
+  --plate-filter:none;
+  --grid:#0d6e6310;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  --pad:1.5rem;
 }
 @media (prefers-color-scheme:dark){
   :root{
-    --bg:#16171a; --fg:#e8e6e1; --muted:#a5a29a; --rule:#2e3034;
-    --link:#8cbdef; --focus:#8cbdef;
+    --bg:#0e1013; --bg2:#14171c; --surface:#15181d; --plate:#f2f1ed;
+    --ink:#e8e7e3; --ink2:#c3c6cb; --muted:#9aa1aa; --faint:#7b828b;
+    --line:#252a31; --line2:#333941;
+    --accent:#4fd1bd; --accent-soft:#4fd1bd1f; --rust:#e08a68;
+    --plate-filter:brightness(.94) contrast(1.03) saturate(.96);
+    --grid:#4fd1bd14;
   }
 }
-*{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 body{
-  margin:0; background:var(--bg); color:var(--fg);
-  font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
-  font-feature-settings:"kern" 1;
+  margin:0;background:var(--bg);color:var(--ink);
+  font:400 16.5px/1.66 Plex,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font-feature-settings:"kern" 1,"liga" 1;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
 }
-main{max-width:44rem; margin:0 auto; padding:3rem 1.25rem 4rem}
-h1{font-size:1.6rem; line-height:1.2; margin:0 0 .5rem; letter-spacing:-.01em}
-h2{
-  font-size:.8rem; text-transform:uppercase; letter-spacing:.09em; font-weight:600;
-  color:var(--muted); margin:2.75rem 0 1rem; padding-bottom:.4rem;
-  border-bottom:1px solid var(--rule);
+::selection{background:var(--accent-soft);color:var(--ink)}
+a{color:var(--accent);text-decoration:none}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
+
+/* ---------- scroll progress ---------- */
+.progress{position:fixed;inset:0 0 auto 0;height:2px;z-index:60;background:transparent;pointer-events:none}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--rust));transform-origin:0 50%}
+
+/* ---------- side rail ---------- */
+.rail{position:fixed;left:1.6rem;top:50%;transform:translateY(-50%);z-index:50;display:none}
+.rail ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:1.15rem}
+.rail a{display:flex;align-items:center;gap:.6rem;color:var(--faint);font:400 10.5px/1 PlexMono,monospace;letter-spacing:.1em;text-transform:uppercase}
+.rail span.dot{width:7px;height:7px;border:1px solid var(--line2);border-radius:50%;transition:background .3s,border-color .3s,transform .3s}
+.rail a.on{color:var(--accent)}
+.rail a.on span.dot{background:var(--accent);border-color:var(--accent);transform:scale(1.35)}
+@media (min-width:1180px){.rail{display:block}}
+
+/* ---------- layout ---------- */
+.wrap{max-width:60rem;margin:0 auto;padding:0 var(--pad)}
+main{display:block}
+section{padding:4.5rem 0 1rem;scroll-margin-top:2rem}
+
+/* ---------- hero ---------- */
+.hero{position:relative;padding:5.5rem 0 3.5rem;overflow:hidden;border-bottom:1px solid var(--line)}
+.hero::before{
+  content:"";position:absolute;inset:-2px;z-index:0;
+  background-image:radial-gradient(var(--grid) 1px,transparent 1px);
+  background-size:22px 22px;
+  -webkit-mask-image:radial-gradient(120% 90% at 22% 8%,#000 0%,transparent 72%);
+  mask-image:radial-gradient(120% 90% at 22% 8%,#000 0%,transparent 72%);
 }
-h3{font-size:1rem; margin:0 0 .25rem; font-weight:600}
-p{margin:0 0 .75rem}
-.lede{font-size:1.05rem; margin:0 0 .6rem; max-width:38rem}
-.meta{color:var(--muted); font-size:.925rem; margin:0}
-article{margin:0 0 1.6rem}
-article p{margin:0; color:var(--muted)}
-article p em{font-style:italic}
+.hero .wrap{position:relative;z-index:1}
+.hero-grid{display:grid;gap:2.75rem;align-items:center}
+@media (min-width:900px){.hero-grid{grid-template-columns:1.05fr .95fr;gap:3.5rem}}
+.eyebrow{
+  font:500 11px/1 PlexMono,monospace;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 1.15rem;display:flex;align-items:center;gap:.7rem
+}
+.eyebrow::after{content:"";height:1px;flex:1;background:var(--line);max-width:8rem}
+h1{
+  font:600 clamp(2.15rem,6.2vw,3.5rem)/1.04 Plex,sans-serif;
+  letter-spacing:-.028em;margin:0 0 1.1rem;
+}
+.lede{
+  font:400 clamp(1.08rem,2.3vw,1.32rem)/1.5 PlexSerif,Georgia,serif;
+  font-style:italic;color:var(--ink2);margin:0 0 1.6rem;max-width:32ch;
+}
+.hero-meta{
+  font:400 12.5px/1.85 PlexMono,monospace;color:var(--muted);margin:0;
+  letter-spacing:.005em;
+}
+.hero-meta a{border-bottom:1px solid var(--line2);padding-bottom:1px}
+.hero-meta a:hover{border-color:var(--accent)}
+.hero-meta b{color:var(--ink2);font-weight:400}
+
+/* ---------- figure plates ---------- */
+figure{margin:0}
+.plate{
+  background:var(--plate);border:1px solid var(--line);border-radius:3px;
+  padding:.55rem;overflow:hidden;
+}
+.plate img{display:block;width:100%;height:auto;border-radius:2px;filter:var(--plate-filter)}
+figcaption{
+  font:400 11.5px/1.55 PlexMono,monospace;color:var(--faint);
+  margin-top:.7rem;letter-spacing:.005em;
+}
+figcaption b{color:var(--muted);font-weight:400}
+.hero figure{will-change:transform}
+
+/* ---------- section heads ---------- */
+.shead{display:flex;align-items:baseline;gap:.85rem;margin:0 0 2.25rem}
+.shead .idx{font:500 11px/1 PlexMono,monospace;color:var(--accent);letter-spacing:.12em;flex:0 0 auto}
+.shead h2{
+  font:500 11px/1 PlexMono,monospace;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted);margin:0;white-space:nowrap;
+}
+.shead .rule{height:1px;flex:1;background:var(--line);transform:scaleX(0);transform-origin:0 50%}
+
+/* ---------- projects ---------- */
+.proj{
+  padding:2.4rem 0;border-top:1px solid var(--line);
+}
+.proj:first-of-type{border-top:0;padding-top:0}
+.proj-grid{display:grid;gap:1.9rem}
+@media (min-width:860px){
+  .proj-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.02fr);gap:2.6rem;align-items:start}
+  .proj.flip .proj-body{order:2}
+}
+.pname{display:flex;align-items:baseline;gap:.7rem;margin:0 0 .55rem;flex-wrap:wrap}
+.pname .n{font:500 11px/1 PlexMono,monospace;color:var(--faint);letter-spacing:.1em}
+.pname h3{font:500 1.22rem/1.2 PlexMono,monospace;margin:0;letter-spacing:-.01em}
+.pname h3 a{color:var(--ink);border-bottom:1px solid var(--accent);padding-bottom:2px;transition:color .25s}
+.pname h3 a:hover{color:var(--accent)}
 .tag{
-  font-weight:400; font-size:.8rem; color:var(--muted);
-  letter-spacing:.02em; margin-left:.4rem; white-space:nowrap;
+  font:400 10px/1 PlexMono,monospace;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--rust);border:1px solid currentColor;border-radius:2px;padding:.28em .5em;
 }
-.also{color:var(--muted); font-size:.925rem; margin:1.75rem 0 0}
-.bg p{color:var(--muted)}
-ul.links{list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:.4rem 1.4rem}
-ul.links li{margin:0}
-a{color:var(--link); text-decoration:underline; text-decoration-thickness:1px; text-underline-offset:2px}
-a:hover{text-decoration-thickness:2px}
-a:focus-visible{outline:2px solid var(--focus); outline-offset:2px; border-radius:2px}
-@media (max-width:26rem){
-  main{padding:2rem 1rem 3rem}
-  h1{font-size:1.4rem}
-  .lede{font-size:1rem}
-  body{font-size:15.5px}
+.kicker{font:400 .95rem/1.5 PlexSerif,Georgia,serif;font-style:italic;color:var(--accent);margin:0 0 .85rem}
+.proj p.body{margin:0 0 1.4rem;color:var(--ink2)}
+.proj p.body em{font-family:PlexSerif,Georgia,serif}
+
+/* ---------- metrics ---------- */
+.metrics{display:grid;gap:.95rem 1.15rem;grid-template-columns:repeat(auto-fit,minmax(6.4rem,1fr));margin:0 0 .4rem;padding:0;list-style:none;align-items:stretch}
+.metric{min-width:0;display:flex;flex-direction:column}
+.mv{
+  display:block;font:500 1.5rem/1.05 PlexMono,monospace;color:var(--ink);
+  font-variant-numeric:tabular-nums;letter-spacing:-.02em;
 }
+.mv i{font-style:normal;font-size:.62em;color:var(--muted);margin-left:.06em}
+.mv .dn{color:var(--rust)}
+.ml{display:block;font:400 11px/1.4 PlexMono,monospace;color:var(--faint);margin-top:.32rem;letter-spacing:.01em}
+.bar{display:block;height:2px;background:var(--line);margin-top:auto;position:relative;overflow:hidden;border-radius:2px}
+.metric:has(.bar) .ml{margin-bottom:.6rem}
+.bar::after{content:"";position:absolute;inset:0 auto 0 0;width:0;background:var(--accent);border-radius:2px}
+.bar.neg::after{background:var(--rust)}
+
+/* ---------- divider strand ---------- */
+.strand{display:block;width:100%;height:26px;margin:1rem 0 0;overflow:visible}
+.strand path{fill:none;stroke:var(--line2);stroke-width:1.1}
+.strand .rung{stroke:var(--accent);stroke-width:1;opacity:.5}
+
+/* ---------- background block ---------- */
+.bglist{list-style:none;margin:0;padding:0;display:grid;gap:1.45rem}
+.bglist li{display:grid;gap:.15rem .95rem;grid-template-columns:1fr}
+@media (min-width:700px){.bglist li{grid-template-columns:9.5rem 1fr}}
+.bglist .k{font:400 11px/1.7 PlexMono,monospace;letter-spacing:.11em;text-transform:uppercase;color:var(--faint)}
+.bglist .v{color:var(--ink2);margin:0}
+.bglist .v b{color:var(--ink);font-weight:600}
+
+/* ---------- links ---------- */
+.linkgrid{list-style:none;margin:0;padding:0;display:grid;gap:0;border-top:1px solid var(--line)}
+.linkgrid li{border-bottom:1px solid var(--line)}
+.linkgrid a{
+  display:flex;align-items:baseline;justify-content:space-between;gap:1rem;
+  padding:1.05rem .2rem;color:var(--ink);
+  font:500 1.05rem/1.2 PlexMono,monospace;position:relative;
+}
+.linkgrid a::before{
+  content:"";position:absolute;left:calc(var(--pad)*-1);right:calc(var(--pad)*-1);top:0;bottom:0;
+  background:var(--accent-soft);opacity:0;transition:opacity .3s var(--ease);z-index:0;
+}
+.linkgrid a:hover::before{opacity:1}
+.linkgrid a>*{position:relative;z-index:1}
+.linkgrid .h{font:400 11.5px/1.4 PlexMono,monospace;color:var(--faint);text-align:right;letter-spacing:.02em}
+.linkgrid a:hover .h{color:var(--accent)}
+
+footer{
+  margin-top:4.5rem;padding:2rem 0 3.25rem;border-top:1px solid var(--line);
+  font:400 11.5px/1.7 PlexMono,monospace;color:var(--faint);
+  display:flex;flex-wrap:wrap;gap:.4rem 1.4rem;justify-content:space-between;
+}
+
+/* ---------- reveal choreography (JS-gated) ---------- */
+html.js .rv{opacity:0;transform:translateY(16px)}
+html.js .rv.in{
+  opacity:1;transform:none;
+  transition:opacity .75s var(--ease),transform .75s var(--ease);
+  transition-delay:calc(var(--i,0)*70ms);
+}
+html.js .shead .rule{transition:transform .9s var(--ease) .1s}
+html.js .shead.in .rule{transform:scaleX(1)}
+html.js .proj .metric{opacity:0;transform:translateY(10px)}
+html.js .proj.in .metric{
+  opacity:1;transform:none;
+  transition:opacity .6s var(--ease),transform .6s var(--ease);
+  transition-delay:calc(.18s + var(--j,0)*90ms);
+}
+html.js .proj.in .bar::after{
+  width:calc(var(--v,0)*100%);
+  transition:width 1.05s var(--ease) calc(.3s + var(--j,0)*90ms);
+}
+html.js .strand path{stroke-dasharray:var(--len,600);stroke-dashoffset:var(--len,600)}
+html.js .strand.in path{stroke-dashoffset:0;transition:stroke-dashoffset 1.6s var(--ease)}
+
 @media (prefers-reduced-motion:reduce){
-  *{animation:none !important; transition:none !important}
+  html{scroll-behavior:auto}
+  html.js .rv,html.js .proj .metric{opacity:1!important;transform:none!important;transition:none!important}
+  html.js .shead .rule{transform:scaleX(1)!important;transition:none!important}
+  html.js .proj.in .bar::after{width:calc(var(--v,0)*100%);transition:none!important}
+  html.js .strand path{stroke-dashoffset:0!important;transition:none!important}
+  .hero figure{transform:none!important}
+}
+@media (max-width:420px){
+  :root{--pad:1.1rem}
+  body{font-size:16px}
+  .hero{padding:3.25rem 0 2.5rem}
+  section{padding:3.25rem 0 1rem}
+  .proj{padding:1.9rem 0}
+  .proj-grid{gap:1.45rem}
+  .shead{margin-bottom:1.75rem}
+  .mv{font-size:1.32rem}
+  .metrics{grid-template-columns:repeat(auto-fit,minmax(6.2rem,1fr));gap:.85rem .9rem}
+  .lede{max-width:none}
 }
 </style>
 </head>
 <body>
-<main>
 
-<header>
-  <h1>Emilio Venegas</h1>
-  <p class="lede">Computational biologist — geometric deep learning for structure-based drug design, and longitudinal modeling of clinical cohorts.</p>
-  <p class="meta">B.Sc. Biosciences, Tecnológico de Monterrey (2026) · Guadalajara, Mexico · <a href="mailto:emiliovenegas10@gmail.com">emiliovenegas10@gmail.com</a></p>
+<div class="progress" aria-hidden="true"><i></i></div>
+
+<nav class="rail" aria-label="Sections">
+  <ol>
+    <li><a href="#work"><span class="dot"></span>Work</a></li>
+    <li><a href="#background"><span class="dot"></span>Background</a></li>
+    <li><a href="#links"><span class="dot"></span>Links</a></li>
+  </ol>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow rv">Computational biology</p>
+        <h1 class="rv" style="--i:1">Emilio Venegas</h1>
+        <p class="lede rv" style="--i:2">Geometric deep learning for structure-based drug design, and longitudinal modeling of clinical cohorts.</p>
+        <p class="hero-meta rv" style="--i:3">
+          <b>B.Sc. Biosciences</b>, Tecnológico de Monterrey, 2026<br>
+          Guadalajara, Mexico<br>
+          <a href="mailto:emiliovenegas10@gmail.com">emiliovenegas10@gmail.com</a>
+        </p>
+      </div>
+      <figure class="rv" style="--i:2">
+        <div class="plate">
+          <img src="assets/figures/zinc-site-860.webp"
+               srcset="assets/figures/zinc-site-860.webp 860w, assets/figures/zinc-site-1290.webp 1290w"
+               sizes="(min-width:900px) 44vw, 92vw"
+               width="860" height="835" fetchpriority="high"
+               alt="Catalytic zinc site of PDB 9ZSN at 1.74 ångström resolution. Three protein sidechain donors — His48 at 2.10 Å, His50 at 2.09 Å and Glu247 at 2.05 Å — share the zinc coordination sphere with one native ligand oxygen at 2.03 Å.">
+        </div>
+        <figcaption><b>Catalytic zinc site, PDB 9ZSN (1.74 Å).</b> Three protein sidechain donors and one native ligand donor share the coordination sphere. This is the atom that published generative models delete before they ever see the pocket.</figcaption>
+      </figure>
+    </div>
+  </div>
 </header>
 
-<section>
-  <h2>Selected work</h2>
+<main>
 
-  <article>
-    <h3><a href="https://github.com/EmilioVenegas/metal-aware-sbdd">metal-aware-sbdd</a></h3>
-    <p>Published pocket-conditioned 3D generative models — DiffSBDD, TargetDiff, Pocket2Mol — delete catalytic metal ions during preprocessing; found by reading their source. On a curated 133-target catalytic-zinc benchmark held disjoint from CrossDocked training data, generated ligands coordinate the zinc validly in 20% of molecules against a 77% native-ligand ceiling. Fine-tuning on metalloprotein-enriched data through the same metal-blind representation makes it worse, not better: 11%. Endpoints and decision rules pre-registered before the data they judge. Repair arm in progress.</p>
-  </article>
+<section id="work">
+  <div class="wrap">
+    <div class="shead rv"><h2>Selected work</h2><span class="rule"></span></div>
 
-  <article>
-    <h3><a href="https://github.com/EmilioVenegas/strider">strider</a></h3>
-    <p>Nucleic acid thermodynamics and kinetics in pure Python, with no NUPACK or ViennaRNA dependency: nearest-neighbor free energies, O(n³) secondary-structure folding (Zuker, McCaskill), strand-displacement rate constants, parallel-tempered sequence design. Mean F-measure 0.99 across 11 canonical hairpins, 10 of 11 an exact match; 0% relative error on toehold rate constants from 0 to 12 nt; 646 tests. On PyPI as <em>strider-dna</em>.</p>
-  </article>
+    <!-- 1 -->
+    <article class="proj rv">
+      <div class="proj-grid">
+        <div class="proj-body">
+          <div class="pname"><span class="n">01</span><h3><a href="https://github.com/EmilioVenegas/metal-aware-sbdd">metal-aware-sbdd</a></h3></div>
+          <p class="kicker">The metal is deleted before the model ever sees the pocket.</p>
+          <p class="body">Published pocket-conditioned 3D generative models — DiffSBDD, TargetDiff, Pocket2Mol — strip catalytic metal ions during preprocessing. Found by reading their source. On a curated 133-target catalytic-zinc benchmark held disjoint from CrossDocked training data, generated ligands coordinate the zinc validly in a fifth of molecules against a 77% native-ligand ceiling. Fine-tuning on metalloprotein-enriched data through the same metal-blind representation makes it worse, not better. Endpoints and decision rules pre-registered before the data they judge; the repair arm is still running.</p>
+          <ul class="metrics">
+            <li class="metric" style="--j:0"><span class="mv">77.2<i>%</i></span><span class="ml">native-ligand ceiling</span><span class="bar" style="--v:.7717"></span></li>
+            <li class="metric" style="--j:1"><span class="mv">20.0<i>%</i></span><span class="ml">base DiffSBDD</span><span class="bar" style="--v:.1998"></span></li>
+            <li class="metric" style="--j:2"><span class="mv"><span class="dn">10.6</span><i>%</i></span><span class="ml">after metal-blind fine-tuning</span><span class="bar neg" style="--v:.1058"></span></li>
+          </ul>
+        </div>
+        <figure>
+          <div class="plate">
+            <img src="assets/figures/coordination-arms-900.webp"
+                 srcset="assets/figures/coordination-arms-900.webp 900w, assets/figures/coordination-arms-1350.webp 1350w"
+                 sizes="(min-width:860px) 46vw, 92vw" width="900" height="417" loading="lazy" decoding="async"
+                 alt="Horizontal bar chart of the percentage of molecules with at least one valid metal coordination. Native ligands reach a pooled 77.17 percent, base DiffSBDD 19.98 percent, and the metal-blind fine-tuned arm falls to 10.58 percent, each with cluster-mean confidence intervals.">
+          </div>
+          <figcaption><b>Valid coordination against the deleted catalytic Zn²⁺.</b> Primary X-ray cohort: 127 targets in 21 sequence clusters, 100 valid molecules per target. Fine-tuning moves the wrong way.</figcaption>
+        </figure>
+      </div>
+    </article>
 
-  <article>
-    <h3><a href="https://github.com/EmilioVenegas/cadence">cadence</a></h3>
-    <p>Latent Neural ODE–VAE over six waves of the Mexican Health and Aging Study (2001–2021), compressing 34 clinical deficits into an 8-dimensional manifold whose native output is aging velocity. Cognitive-decline AUC 0.72 → 0.79 and functional-decline AUC 0.67 → 0.75 over demographics and clinical state, under patient-level 5-fold cross-validation; mortality C-index 0.865 against 0.780 for the same encoder without ODE integration. A digital-twin module re-integrates the learned dynamics under modified lifestyle controls, behind a conformal Mahalanobis out-of-distribution guardrail.</p>
-  </article>
+    <!-- 2 -->
+    <article class="proj rv flip">
+      <div class="proj-grid">
+        <div class="proj-body">
+          <div class="pname"><span class="n">02</span><h3><a href="https://github.com/EmilioVenegas/strider">strider</a></h3></div>
+          <p class="kicker">Nucleic-acid thermodynamics without NUPACK or ViennaRNA.</p>
+          <p class="body">Nearest-neighbor free energies, O(n³) secondary-structure folding by Zuker and McCaskill recursions, strand-displacement rate constants, and a defect-weighted parallel-tempered sequence designer — pure Python, no external thermodynamics dependency. Validated against canonical hairpins rather than asserted. Published on PyPI as <em>strider-dna</em>.</p>
+          <ul class="metrics">
+            <li class="metric" style="--j:0"><span class="mv">0.99</span><span class="ml">mean F-measure, 11 canonical hairpins</span><span class="bar" style="--v:.99"></span></li>
+            <li class="metric" style="--j:1"><span class="mv">10<i>/11</i></span><span class="ml">exact structure match</span><span class="bar" style="--v:.909"></span></li>
+            <li class="metric" style="--j:2"><span class="mv">646</span><span class="ml">tests passing</span></li>
+          </ul>
+        </div>
+        <figure>
+          <div class="plate">
+            <img src="assets/figures/hairpin-2d-900.webp"
+                 srcset="assets/figures/hairpin-2d-900.webp 900w, assets/figures/hairpin-2d-1350.webp 1350w"
+                 sizes="(min-width:860px) 46vw, 92vw" width="900" height="518" loading="lazy" decoding="async"
+                 alt="Two native 2D nucleic acid secondary structures computed by strider: BEACON_AT drawn as an open A-T rich strand, and BEACON_GC folded into a hairpin with a G-C stem and a T-rich loop.">
+          </div>
+          <figcaption><b>Native 2D secondary structures.</b> The same energy model resolves an unstructured A·T beacon and a folded G·C stem-loop.</figcaption>
+        </figure>
+      </div>
+    </article>
 
-  <article>
-    <h3><a href="https://github.com/EmilioVenegas/ATOMICA-Diffusion-Antibiotic-design">ATOMICA-Diffusion</a></h3>
-    <p>Does conditioning a structure-based diffusion model on a pretrained <em>interaction</em> representation beat raw pocket geometry? Couples frozen ATOMICA pocket embeddings to frozen DiffSBDD through a single SE(3)-equivariant cross-attention adapter, so the measured effect isolates the conditioning signal. Across 100 held-out pockets and roughly 9,300 valid molecules per arm, QED rises 0.424 → 0.483 and Lipinski 4.42 → 4.69. Target application: PBP3 in multidrug-resistant <em>A. baumannii</em>, <em>P. aeruginosa</em> and <em>K. pneumoniae</em>.</p>
-  </article>
+    <!-- 3 -->
+    <article class="proj rv">
+      <div class="proj-grid">
+        <div class="proj-body">
+          <div class="pname"><span class="n">03</span><h3><a href="https://github.com/EmilioVenegas/cadence">cadence</a></h3></div>
+          <p class="kicker">Aging as a velocity, not a state.</p>
+          <p class="body">A latent Neural ODE–VAE over six waves of the Mexican Health and Aging Study, 2001 to 2021, compressing 34 clinical deficits into an 8-dimensional manifold whose native output is aging velocity. Two patients with identical frailty scores can sit in entirely different velocity regimes. Cognitive-decline AUC 0.72 → 0.79 and functional-decline 0.67 → 0.75 over demographics and clinical state under patient-level 5-fold cross-validation; removing ODE integration from the same encoder and risk head costs 0.085 of mortality C-index. A digital-twin module re-integrates the learned dynamics under modified lifestyle controls, behind a conformal Mahalanobis out-of-distribution guardrail.</p>
+          <ul class="metrics">
+            <li class="metric" style="--j:0"><span class="mv">0.865</span><span class="ml">mortality C-index, full model</span><span class="bar" style="--v:.865"></span></li>
+            <li class="metric" style="--j:1"><span class="mv">0.780</span><span class="ml">same encoder, no ODE</span><span class="bar" style="--v:.780"></span></li>
+            <li class="metric" style="--j:2"><span class="mv">4.77<i>×</i></span><span class="ml">mortality hazard, fast vs slow agers</span></li>
+          </ul>
+        </div>
+        <figure>
+          <div class="plate">
+            <img src="assets/figures/km-survival-900.webp"
+                 srcset="assets/figures/km-survival-900.webp 900w, assets/figures/km-survival-1350.webp 1350w"
+                 sizes="(min-width:860px) 46vw, 92vw" width="900" height="556" loading="lazy" decoding="async"
+                 alt="Kaplan-Meier survival curves over twenty years of follow-up. Slow agers in the bottom velocity quartile stay near 0.8 survival probability, while fast agers in the top quartile fall below 0.4, annotated with a Cox hazard ratio of 4.77 and a log-rank p below 0.001.">
+          </div>
+          <figcaption><b>Survival by velocity phenotype.</b> Fast agers against slow agers over 20 years of follow-up, Cox HR 4.77 adjusted for baseline age and encoder uncertainty.</figcaption>
+        </figure>
+      </div>
+    </article>
 
-  <article>
-    <h3><a href="https://github.com/EmilioVenegas/mantis-delta">mantis-delta</a></h3>
-    <p>Chemical reaction network theory under mass-action kinetics: deficiency, linkage classes and weak reversibility, then the Deficiency Zero and Deficiency One theorems, with symbolic ODEs and Jacobians via SymPy. When a theorem applies, qualitative behaviour is certified from topology alone for every admissible rate constant, without running a simulation. Steady-state residuals below 10⁻⁶ M s⁻¹; Goldbeter–Koshland dose-response matches the quasi-steady-state approximation to within 1% across a 400× activity scan; 169 tests.</p>
-  </article>
+    <!-- 4 -->
+    <article class="proj rv flip">
+      <div class="proj-grid">
+        <div class="proj-body">
+          <div class="pname"><span class="n">04</span><h3><a href="https://github.com/EmilioVenegas/ATOMICA-Diffusion-Antibiotic-design">ATOMICA-Diffusion</a></h3></div>
+          <p class="kicker">Does a pretrained interaction representation beat raw pocket geometry?</p>
+          <p class="body">Couples frozen ATOMICA pocket embeddings — a foundation model pretrained on roughly two million molecular interaction interfaces — into a frozen DiffSBDD through a single SE(3)-equivariant cross-attention adapter. Both backbones stay frozen, so the measured effect isolates the conditioning signal itself. It buys drug-likeness and costs diversity, which is the honest result rather than the convenient one. Applied to PBP3 in multidrug-resistant <em>A. baumannii</em>, <em>P. aeruginosa</em> and <em>K. pneumoniae</em>.</p>
+          <ul class="metrics">
+            <li class="metric" style="--j:0"><span class="mv">+13.9<i>%</i></span><span class="ml">QED against unconditioned baseline</span><span class="bar" style="--v:.927"></span></li>
+            <li class="metric" style="--j:1"><span class="mv">+6.2<i>%</i></span><span class="ml">Lipinski compliance</span><span class="bar" style="--v:.413"></span></li>
+            <li class="metric" style="--j:2"><span class="mv"><span class="dn">−6.4</span><i>%</i></span><span class="ml">diversity, the tradeoff</span><span class="bar neg" style="--v:.427"></span></li>
+          </ul>
+        </div>
+        <figure>
+          <div class="plate">
+            <img src="assets/figures/atomica-ablation-900.webp"
+                 srcset="assets/figures/atomica-ablation-900.webp 900w, assets/figures/atomica-ablation-1350.webp 1350w"
+                 sizes="(min-width:860px) 46vw, 92vw" width="900" height="495" loading="lazy" decoding="async"
+                 alt="Bar chart of relative change against the unconditioned baseline across 100 pockets. QED rises 13.9 percent and Lipinski 6.2 percent, synthetic accessibility 0.6 percent, novelty unchanged, while uniqueness falls 0.1 percent, validity 1.3 percent and diversity 6.4 percent.">
+          </div>
+          <figcaption><b>A/B ablation, 100 held-out pockets, 9,246+ valid molecules per arm.</b> Pocket conditioning shifts drug-likeness up and diversity down.</figcaption>
+        </figure>
+      </div>
+    </article>
 
-  <article>
-    <h3>Gram-stain pathogen identification <span class="tag">not public</span></h3>
-    <p>Self-attention Multiple Instance Learning over Vision Transformer patch embeddings, across 5,828 standardized clinical isolates: 0.947 accuracy on Gram class, 0.876 at species level. Built with clinical microbiologists at Hospital Civil de Guadalajara. Manuscript under review; code not yet public.</p>
-  </article>
+    <!-- 5 -->
+    <article class="proj rv">
+      <div class="proj-grid">
+        <div class="proj-body">
+          <div class="pname"><span class="n">05</span><h3><a href="https://github.com/EmilioVenegas/mantis-delta">mantis-delta</a></h3></div>
+          <p class="kicker">Certify the dynamics from topology, before running anything.</p>
+          <p class="body">Chemical reaction network theory under mass-action kinetics: deficiency, linkage classes and weak reversibility, then the Deficiency Zero and Deficiency One theorems, with symbolic ODEs and Jacobians derived through SymPy. When a theorem applies you know the qualitative behaviour — unique steady state, no oscillations, no bistability — for <em>every</em> physically admissible rate constant, without running a single simulation. Where no theorem applies, the numerical side takes over and finds the limit cycles.</p>
+          <ul class="metrics">
+            <li class="metric" style="--j:0"><span class="mv">&lt;1<i>%</i></span><span class="ml">deviation from QSSA, 400× activity scan</span></li>
+            <li class="metric" style="--j:1"><span class="mv">10<i>⁻⁶</i></span><span class="ml">steady-state residual, M s⁻¹</span></li>
+            <li class="metric" style="--j:2"><span class="mv">169</span><span class="ml">tests passing</span></li>
+          </ul>
+        </div>
+        <figure>
+          <div class="plate">
+            <img src="assets/figures/brusselator-900.webp"
+                 srcset="assets/figures/brusselator-900.webp 900w, assets/figures/brusselator-1350.webp 1350w"
+                 sizes="(min-width:860px) 46vw, 92vw" width="900" height="327" loading="lazy" decoding="async"
+                 alt="Two panels for the chemostatted Brusselator. The left panel shows two species concentrations oscillating in sustained antiphase over forty seconds. The right panel shows the phase portrait, with the transient spiralling outward onto a closed limit cycle around a marked unstable fixed point.">
+          </div>
+          <figcaption><b>Brusselator, A = 1 and B = 3.</b> Sustained oscillation and the limit cycle in phase space, with the unstable fixed point marked — the regime the deficiency theorems explicitly cannot rule out.</figcaption>
+        </figure>
+      </div>
+    </article>
 
-  <p class="also">Also public: <a href="https://github.com/EmilioVenegas/VAMprinting">VAMprinting</a>, a web controller for volumetric additive manufacturing printers · <a href="https://github.com/EmilioVenegas/arq-molecular-engineering">arq</a>, LangGraph agents for molecular design over SMILES · <a href="https://github.com/EmilioVenegas/breast-cancer-app">CancerSense</a>, a mammography CNN on INbreast and DDSM.</p>
+    <!-- 6 -->
+    <article class="proj rv flip">
+      <div class="proj-grid">
+        <div class="proj-body">
+          <div class="pname"><span class="n">06</span><h3>Gram-stain pathogen identification</h3><span class="tag">not public</span></div>
+          <p class="kicker">Whole-slide attention over a corpus built with the microbiologists who labelled it.</p>
+          <p class="body">Self-attention Multiple Instance Learning over Vision Transformer patch embeddings, standardizing 5,828 clinical isolates through 95th-percentile normalization, CLAHE and Otsu thresholding, with multi-head attention modelling spatial context across the whole slide. Built with clinical microbiologists at Hospital Civil de Guadalajara, who set the label-quality and validation design. Manuscript under review; code not yet public.</p>
+          <ul class="metrics">
+            <li class="metric" style="--j:0"><span class="mv">0.947</span><span class="ml">accuracy, Gram class</span><span class="bar" style="--v:.947"></span></li>
+            <li class="metric" style="--j:1"><span class="mv">0.876</span><span class="ml">accuracy, species level</span><span class="bar" style="--v:.876"></span></li>
+            <li class="metric" style="--j:2"><span class="mv">5,828</span><span class="ml">clinical isolates</span></li>
+          </ul>
+        </div>
+        <div>
+          <svg class="strand rv" viewBox="0 0 300 26" preserveAspectRatio="none" aria-hidden="true" style="height:70px">
+            <path style="--len:640" d="M0 4 C 25 4, 25 22, 50 22 S 75 4, 100 4 S 125 22, 150 22 S 175 4, 200 4 S 225 22, 250 22 S 275 4, 300 4"/>
+            <path style="--len:640" d="M0 22 C 25 22, 25 4, 50 4 S 75 22, 100 22 S 125 4, 150 4 S 175 22, 200 22 S 225 4, 250 4 S 275 22, 300 22"/>
+            <g class="rung">
+              <path style="--len:20" d="M25 8v10"/><path style="--len:20" d="M75 8v10"/>
+              <path style="--len:20" d="M125 8v10"/><path style="--len:20" d="M175 8v10"/>
+              <path style="--len:20" d="M225 8v10"/><path style="--len:20" d="M275 8v10"/>
+            </g>
+          </svg>
+          <figcaption style="margin-top:1rem">No figure here on purpose. The corpus is clinical and the code is not public yet, so there is nothing on this page that a reader cannot check.</figcaption>
+        </div>
+      </div>
+    </article>
+
+    <p class="hero-meta rv" style="margin-top:2.75rem">
+      Also public:
+      <a href="https://github.com/EmilioVenegas/VAMprinting">VAMprinting</a>, a web controller for volumetric additive manufacturing printers ·
+      <a href="https://github.com/EmilioVenegas/arq-molecular-engineering">arq</a>, LangGraph agents for molecular design over SMILES ·
+      <a href="https://github.com/EmilioVenegas/breast-cancer-app">CancerSense</a>, a mammography CNN on INbreast and DDSM
+    </p>
+  </div>
 </section>
 
-<section class="bg">
-  <h2>Background</h2>
-  <p>B.Sc. Biosciences, Tecnológico de Monterrey (2026). A.Sc. Pharmaceutical Chemistry, CETI Colomos (2022).</p>
-  <p>Previously: instrumentation and tomographic-printing software at Brigham and Women's Hospital / Harvard Medical School; machine learning at Mendel Biosciences; AI/ML research at Hospital Civil de Guadalajara.</p>
-  <p>Gold Medal, Iberoamerican Chemistry Olympiad (2021). Bronze Medal, 53rd International Chemistry Olympiad, Japan (2021).</p>
+<section id="background">
+  <div class="wrap">
+    <div class="shead rv"><h2>Background</h2><span class="rule"></span></div>
+    <ul class="bglist">
+      <li class="rv"><span class="k">Education</span><p class="v"><b>B.Sc. Biosciences</b>, Tecnológico de Monterrey, 2026. <b>A.Sc. Pharmaceutical Chemistry</b>, CETI Colomos, 2022.</p></li>
+      <li class="rv" style="--i:1"><span class="k">Previously</span><p class="v">Instrumentation and tomographic-printing software at <b>Brigham and Women's Hospital / Harvard Medical School</b>. Machine learning at <b>Mendel Biosciences</b>. AI/ML research at <b>Hospital Civil de Guadalajara</b>.</p></li>
+      <li class="rv" style="--i:2"><span class="k">Bench</span><p class="v">Cell culture, 3D spheroids, qPCR, flow cytometry, Western blotting, organic synthesis — which is why collaborating with experimental teams is not a translation problem.</p></li>
+      <li class="rv" style="--i:3"><span class="k">Olympiad</span><p class="v"><b>Gold Medal</b>, Iberoamerican Chemistry Olympiad, 2021. <b>Bronze Medal</b>, 53rd International Chemistry Olympiad, Japan, 2021.</p></li>
+    </ul>
+  </div>
 </section>
 
-<section>
-  <h2>Links</h2>
-  <ul class="links">
-    <li><a href="https://github.com/EmilioVenegas">GitHub</a></li>
-    <li><a href="https://www.linkedin.com/in/emiliovenegas">LinkedIn</a></li>
-    <li><a href="https://orcid.org/0000-0002-7689-9185">ORCID</a></li>
-    <li><a href="mailto:emiliovenegas10@gmail.com">Email</a></li>
-  </ul>
+<section id="links">
+  <div class="wrap">
+    <div class="shead rv"><h2>Links</h2><span class="rule"></span></div>
+    <ul class="linkgrid">
+      <li class="rv"><a href="https://github.com/EmilioVenegas"><span>GitHub</span><span class="h">EmilioVenegas</span></a></li>
+      <li class="rv" style="--i:1"><a href="https://www.linkedin.com/in/emiliovenegas"><span>LinkedIn</span><span class="h">in/emiliovenegas</span></a></li>
+      <li class="rv" style="--i:2"><a href="https://orcid.org/0000-0002-7689-9185"><span>ORCID</span><span class="h">0000-0002-7689-9185</span></a></li>
+      <li class="rv" style="--i:3"><a href="mailto:emiliovenegas10@gmail.com"><span>Email</span><span class="h">emiliovenegas10@gmail.com</span></a></li>
+    </ul>
+    <footer>
+      <span>Every figure is output from the repository it sits next to.</span>
+      <span><a href="https://github.com/EmilioVenegas/EmilioVenegas.github.io">Source</a></span>
+    </footer>
+  </div>
 </section>
 
 </main>
+
+<script>
+(function(){
+  var root=document.documentElement;
+  root.classList.add('js');
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* reveal on enter */
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}
+    });
+  },{rootMargin:'0px 0px -12% 0px',threshold:0.12});
+  document.querySelectorAll('.rv,.proj,.shead,.strand').forEach(function(el){io.observe(el);});
+
+  /* scroll progress + hero parallax, one rAF-throttled listener */
+  var barEl=document.querySelector('.progress i'),
+      heroFig=document.querySelector('.hero figure'),
+      queued=false;
+  function frame(){
+    queued=false;
+    var max=document.documentElement.scrollHeight-innerHeight,
+        y=scrollY;
+    barEl.style.width=(max>0?Math.min(1,y/max)*100:0)+'%';
+    if(!reduce&&heroFig&&y<innerHeight*1.3){
+      heroFig.style.transform='translate3d(0,'+(y*-0.055).toFixed(2)+'px,0)';
+    }
+  }
+  addEventListener('scroll',function(){if(!queued){queued=true;requestAnimationFrame(frame);}},{passive:true});
+  addEventListener('resize',frame,{passive:true});
+  frame();
+
+  /* rail: mark the section currently owning the viewport */
+  var links=[].slice.call(document.querySelectorAll('.rail a')),
+      secs=links.map(function(a){return document.querySelector(a.getAttribute('href'));});
+  var sio=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      var i=secs.indexOf(e.target);
+      if(i>-1&&e.isIntersecting){links.forEach(function(a,n){a.classList.toggle('on',n===i);});}
+    });
+  },{rootMargin:'-45% 0px -50% 0px'});
+  secs.forEach(function(s){if(s)sio.observe(s);});
+})();
+</script>
 </body>
 </html>
